@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { ClientInstagramEmbed } from '@/components/ui/client-instagram-embed';
 export const dynamic = 'force-dynamic';
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  
   // Read the feed JSON
   const feedPath = path.join(process.cwd(), 'instagram-feed.json');
   let feedData = [];
@@ -16,7 +18,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
     console.error('Error reading feed:', error);
   }
 
-  const product = feedData.find((p: any) => p.id === params.id);
+  const product = feedData.find((p: any) => p.id === id);
 
   if (!product) {
     notFound();
@@ -56,9 +58,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
               {product.caption}
             </div>
 
-            <div className="mt-auto">
+            <div className="mt-auto flex flex-col gap-4">
               <a 
-                href="https://wa.me/351912345678" // Replace with real number
+                href={`https://wa.me/351913685068?text=${encodeURIComponent(`Olá! Quero mais informações sobre esta peça: ${product.permalink}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center px-8 py-4 rounded-full bg-[var(--color-rose-mid)] text-white font-bold tracking-wide transition-all hover:bg-[var(--color-rose-dark)] shadow-[0_4px_14px_rgba(139,26,74,0.3)] hover:shadow-[0_6px_20px_rgba(139,26,74,0.4)] hover:-translate-y-0.5"
@@ -68,8 +70,19 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 </svg>
                 Encomendar pelo WhatsApp
               </a>
-              <p className="text-center text-xs text-gray-400 mt-4">
-                Envia-nos uma mensagem para saberes mais sobre o preço e personalização.
+
+              <a 
+                href={product.permalink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-gray-200 text-gray-700 font-bold tracking-wide transition-all hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] hover:-translate-y-0.5"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                Ver publicação no Instagram
+              </a>
+
+              <p className="text-center text-xs text-gray-400 mt-2">
+                Envia-nos uma mensagem para saberes mais sobre preço e personalização.
               </p>
             </div>
           </div>
