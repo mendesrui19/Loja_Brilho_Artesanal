@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Script from "next/script";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFloat } from "@/components/layout/whatsapp-float";
 import { FadeIn } from "@/components/ui/fade-in";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { ClientInstagramEmbed } from "@/components/ui/client-instagram-embed";
 
 const LABELS: Record<string, string> = {
   all: "Todas",
@@ -35,38 +36,12 @@ export default function Catalogo() {
       });
   }, []);
 
-  // Tell Instagram to process new embeds when filter/posts change
+  // loading is the only state we need for the skeleton now
   useEffect(() => {
-    if (loading) return;
-
-    // Absolute fallback: if Instagram fails to load or process within 4 seconds, show whatever is there
-    const safetyTimeout = setTimeout(() => {
+    if (!loading) {
       setRenderingInsta(false);
-    }, 4000);
-
-    const tryProcess = setInterval(() => {
-      if ((window as any).instgrm) {
-        clearInterval(tryProcess);
-        (window as any).instgrm.Embeds.process();
-        
-        const checkRender = setInterval(() => {
-          const grid = document.getElementById('insta-grid');
-          if (grid && grid.querySelectorAll('iframe').length > 0) {
-            clearInterval(checkRender);
-            setRenderingInsta(false);
-          }
-        }, 200);
-        
-        // Stop checking after 3s of processing
-        setTimeout(() => clearInterval(checkRender), 3000);
-      }
-    }, 300);
-
-    return () => {
-      clearTimeout(safetyTimeout);
-      clearInterval(tryProcess);
-    };
-  }, [loading, filter, posts]);
+    }
+  }, [loading]);
 
   const filteredPosts = posts.filter(post => filter === "all" || post.category === filter);
 
@@ -135,39 +110,40 @@ export default function Catalogo() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white rounded-2xl p-4 shadow-sm border border-[rgba(26,8,16,0.08)]"
+                  className="relative flex-grow flex flex-col bg-white/60 backdrop-blur-xl border border-white p-3 md:p-4 rounded-[2rem] shadow-[0_8px_30px_rgba(139,26,74,0.06)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(139,26,74,0.15)] hover:-translate-y-2 hover:bg-white/80 group h-full"
                 >
-                  <blockquote
-                    className="instagram-media"
-                    data-instgrm-permalink={post.permalink}
-                    data-instgrm-version="14"
-                    style={{
-                      background: "#FFF",
-                      border: 0,
-                      borderRadius: "3px",
-                      boxShadow: "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)",
-                      margin: "1px",
-                      maxWidth: "540px",
-                      minWidth: "326px",
-                      padding: 0,
-                      width: "calc(100% - 2px)"
-                    }}
-                  />
-                  <div className="mt-4 flex flex-col gap-3">
-                    <span className="text-[0.65rem] tracking-wider uppercase text-[var(--color-brand)] font-bold">
-                      {LABELS[post.category] || post.category}
-                    </span>
-                    <a
-                      href={`https://wa.me/351913685068?text=${encodeURIComponent(`Olá! Quero mais informações sobre este produto do catálogo: ${post.permalink}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 text-center border-[1.5px] border-[var(--color-rose-mid)] text-[var(--color-rose-mid)] py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all hover:bg-[var(--color-rose-mid)] hover:text-white hover:shadow-md hover:-translate-y-0.5"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                      </svg>
-                      Pedir igual
-                    </a>
+                  {/* Decorative Pin/Dot */}
+                  <div className="absolute top-6 left-6 w-2 h-2 rounded-full bg-gradient-to-r from-[var(--color-gold)] to-[var(--color-rose)] z-20 shadow-sm" />
+
+                  <div className="rounded-[1.5rem] overflow-hidden bg-white flex-grow flex flex-col group/card h-full relative">
+                    {/* The clickable overlay for the whole card */}
+                    <Link href={`/produto/${post.id}`} className="absolute inset-0 z-20" aria-label={`Ver detalhes de ${post.title}`} />
+                    
+                    {/* Image Container */}
+                    <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden flex items-center justify-center pointer-events-none group-hover/card:scale-105 transition-transform duration-700">
+                      {/* CSS Clipping Trick to hide Instagram UI and show uncropped image */}
+                      <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
+                        <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
+                      </div>
+                      
+                      {/* Overlay gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/card:opacity-100 z-10" />
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="p-6 flex flex-col flex-grow bg-white relative z-10 pointer-events-none">
+                      <h3 className="font-serif text-xl text-[var(--color-dark)] line-clamp-2 mb-3 leading-tight">
+                        {post.title}
+                      </h3>
+                      <div className="mt-auto flex items-center justify-between text-[var(--color-rose-mid)] font-bold text-sm tracking-wide uppercase pt-4 border-t border-gray-100">
+                        <span className="flex items-center">
+                          Ver Detalhes
+                          <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover/card:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -212,7 +188,6 @@ export default function Catalogo() {
 
       <Footer />
       <WhatsAppFloat />
-      <Script src="https://www.instagram.com/embed.js" strategy="lazyOnload" />
     </>
   );
 }
