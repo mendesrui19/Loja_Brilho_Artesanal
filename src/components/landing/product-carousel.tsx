@@ -4,7 +4,12 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { InstagramEmbed } from "react-social-media-embed";
+import dynamic from "next/dynamic";
+
+const InstagramEmbed = dynamic(
+  () => import("react-social-media-embed").then((mod) => mod.InstagramEmbed),
+  { ssr: false }
+);
 
 export function ProductCarousel() {
   const [posts, setPosts] = useState<any[]>([]);
