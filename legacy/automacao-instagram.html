@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automação Instagram | Brilho Artesanal</title>
+  <style>
+    body{margin:0;background:#f7f4ef;color:#24131f;font-family:system-ui,sans-serif}
+    .wrap{max-width:1020px;margin:0 auto;padding:0 18px}
+    header{padding:16px 0;border-bottom:1px solid rgba(0,0,0,.1)}
+    a{text-decoration:none;color:#24131f}
+    h1{font-size:clamp(1.8rem,5vw,3rem);margin:26px 0 8px}
+    p{line-height:1.7;color:#5e5260}
+    .box{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:16px;margin:14px 0}
+    .flow{display:grid;gap:10px;margin-top:18px}
+    .step{padding:12px;border-radius:10px;background:#f5edf2;border:1px solid #e7d9e3}
+    code{background:#f1e7ee;padding:2px 6px;border-radius:6px}
+    .ok{color:#0f7a3c;font-weight:700}
+    .warn{color:#7a4f00;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap"><a href="brilho-artesanal.html">← Brilho Artesanal</a></div>
+  </header>
+  <main class="wrap">
+    <h1>Instagram → Site automático</h1>
+    <p>Esta página implementa a lógica que pediste: quando entra um novo post do Instagram, o site apenas lê esses dados, cria/atualiza o produto e mantém categoria, descrição e comentário coerentes. Se não reconhecer categoria, cai em <strong>Outros</strong>.</p>
+
+    <section class="box">
+      <h2>Fluxo recomendado</h2>
+      <div class="flow">
+        <div class="step">1) Novo post no Instagram (via API/Make/Zapier/n8n webhook).</div>
+        <div class="step">2) Receber <code>caption</code>, <code>hashtags</code>, <code>media_url</code>, <code>permalink</code>.</div>
+        <div class="step">3) Deduplicar por <code>id/permalink</code> para não repetir produtos.</div>
+        <div class="step">4) Correr <code>categorizePost</code> e montar descrição com legenda + comentário.</div>
+        <div class="step">5) Guardar no catálogo com fallback <code>outros</code> quando necessário.</div>
+        <div class="step">6) <strong>Fluxo unidirecional:</strong> Instagram → Site (o site nunca publica no Instagram).</div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Simulação ativa</h2>
+      <p id="status">A processar posts de exemplo...</p>
+      <div id="out"></div>
+    </section>
+
+    <section class="box">
+      <h2>Como ligar ao real</h2>
+      <p><strong>Opção 1 (sem código):</strong> Make/Zapier/n8n com trigger Instagram e envio para teu CMS/JSON do site.</p>
+      <p><strong>Opção 2 (com backend):</strong> endpoint <code>/webhooks/instagram</code> recebe post, aplica mesma função, grava em base de dados.</p>
+      <p class="warn">Nota: checkout continua desligado; o CTA final do produto deve manter WhatsApp/Instagram e o fluxo é sempre Instagram → Site.</p>
+      <p><strong>Já incluído neste projeto:</strong> <code>automation/sync-instagram-to-feed.mjs</code> + <code>automation/n8n-workflow.json</code> para sincronização agendada de produção.</p>
+    </section>
+  </main>
+
+  <script>
+    const categoryRules = [
+      {key:"porta-chaves", terms:["#portachaves", "porta chaves", "chaveiro"]},
+      {key:"bases", terms:["#base", "#bases", "base decorativa"]},
+      {key:"decoracao", terms:["#decoracao", "decoração", "difusor", "vaso"]},
+      {key:"conjuntos", terms:["#conjunto", "#lembranca", "lembrança", "kit"]},
+      {key:"especiais", terms:["dia da mae", "dia da mãe", "natal", "valentine", "presente"]},
+      {key:"momentos", terms:["memoria", "memória", "casamento", "batizado", "recordação"]}
+    ];
+
+    function categorizePost(post){
+      const text = `${post.caption || ""} ${(post.hashtags || []).join(" ")}`.toLowerCase();
+      for (const rule of categoryRules) {
+        if (rule.terms.some(term => text.includes(term.toLowerCase()))) return rule.key;
+      }
+      return "outros";
+    }
+
+    function normalizePost(post){
+      const category = categorizePost(post);
+      return {
+        id: post.id,
+        title: post.title || "Post sem título",
+        category,
+        description: `${post.caption || ""}${post.comments?.[0] ? ` · Comentário: ${post.comments[0]}` : ""}`.trim(),
+        permalink: post.permalink,
+        cta: "whatsapp_instagram"
+      };
+    }
+
+    function dedupePosts(posts){
+      const seen = new Set();
+      return posts.filter((post) => {
+        const key = post.id || post.permalink;
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    const samplePosts = [
+      {id:"1", title:"Porta-chaves azul", caption:"Novo #portachaves com brilho dourado", hashtags:["#resina"], comments:["Quero em rosa também"], permalink:"https://instagram.com/p/1"},
+      {id:"2", title:"Difusor floral", caption:"Peça de decoração elegante", hashtags:["#decoracao"], comments:["Lindo acabamento"], permalink:"https://instagram.com/p/2"},
+      {id:"2", title:"Difusor floral duplicado", caption:"Duplicado para testar", hashtags:["#decoracao"], comments:[], permalink:"https://instagram.com/p/2"},
+      {id:"3", title:"Peça surpresa", caption:"Modelo novo sem tag", hashtags:["#novo"], comments:[], permalink:"https://instagram.com/p/3"}
+    ];
+
+    const result = dedupePosts(samplePosts).map(normalizePost);
+    const out = document.getElementById("out");
+    document.getElementById("status").innerHTML = `<span class="ok">${result.length} posts processados com categorização automática</span>`;
+    out.innerHTML = result.map(item => `
+      <div class="step">
+        <strong>${item.title}</strong><br>
+        categoria: <code>${item.category}</code><br>
+        descrição: ${item.description || "Sem descrição"}<br>
+        permalink: <a target="_blank" href="${item.permalink}">${item.permalink}</a>
+      </div>
+    `).join("");
+  </script>
+</body>
+</html>

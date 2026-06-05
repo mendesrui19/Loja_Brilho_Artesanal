@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo | Brilho Artesanal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f8f2ea;--text:#1b0d17;--soft:#fff;--brand:#a53f6d;--gold:#d4ab53;--wa:#25d366}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif}
+    .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+    .nav{position:sticky;top:0;z-index:10;background:rgba(248,242,234,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.08)}
+    .nav .wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;gap:10px;flex-wrap:wrap}
+    .brand{font-family:"Playfair Display",serif;font-size:1.15rem;text-decoration:none;color:inherit}
+    .links{display:flex;gap:12px;flex-wrap:wrap}
+    .links a{text-decoration:none;color:#543}
+    .head{padding:44px 0 20px}
+    h1,h2{font-family:"Playfair Display",serif}
+    h1{margin:0 0 10px;font-size:clamp(1.9rem,5vw,3rem)}
+    .sub{max-width:740px;color:#5c4d58;line-height:1.7}
+    .note{margin-top:12px;font-size:.86rem;color:#7a6d78}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 8px}
+    .filters button{border:1px solid rgba(0,0,0,.14);background:#fff;padding:8px 14px;border-radius:999px;cursor:pointer}
+    .filters button.active{background:#2d1427;color:#fff;border-color:#2d1427}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;padding:20px 0 60px}
+    .item{background:var(--soft);border-radius:16px;padding:12px;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 20px rgba(0,0,0,.04)}
+    .item h3{margin:10px 8px 4px}
+    .tag{display:inline-block;margin-bottom:12px;background:rgba(165,63,109,.1);color:var(--brand);padding:4px 10px;border-radius:999px;font-size:.75rem}
+    .item p{margin:0 8px;color:#6f6270;line-height:1.6;min-height:52px}
+    .source{display:block;margin:8px 8px 0;font-size:.75rem;color:#867887}
+    .actions{display:flex;gap:8px;margin-top:12px;padding:0 8px 8px}
+    .btn{flex:1;text-align:center;text-decoration:none;padding:9px;border-radius:10px;font-weight:700;font-size:.86rem}
+    .btn.wa{background:var(--wa);color:#fff}
+    .btn.ig{background:linear-gradient(120deg,#833ab4,#fd1d1d,#fcb045);color:#fff}
+    .instagram-media{border-radius:12px!important;margin:0!important;min-width:100%!important;width:100%!important}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a href="brilho-artesanal.html" class="brand">Brilho Artesanal ✨</a>
+      <nav class="links">
+        <a href="brilho-artesanal.html">Landing</a>
+        <a href="inspiracao.html">Inspiração</a>
+        <a href="automacao-instagram.html">Automação</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="head" id="novidades">
+      <h1>Catálogo completo por categoria</h1>
+      <p class="sub">Catálogo alinhado com o Instagram: cada item vem da publicação original (legenda e comentário), com deduplicação automática para evitar produtos repetidos.</p>
+      <p class="note" id="sync-note">A carregar produtos do Instagram...</p>
+      <div class="filters" id="filters"></div>
+    </section>
+    <section class="grid" id="grid"></section>
+  </main>
+
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <script src="instagram-feed.js"></script>
+  <script>
+    const catalog = [];
+    const labels = {
+      all:"Todas",
+      "porta-chaves":"Porta-chaves",
+      bases:"Bases",
+      decoracao:"Decoração",
+      conjuntos:"Conjuntos",
+      especiais:"Especiais",
+      momentos:"Momentos",
+      capas:"Capas",
+      outros:"Outros"
+    };
+    const queryCategory = new URLSearchParams(window.location.search).get("cat");
+    let active = labels[queryCategory] ? queryCategory : "all";
+    const filters = document.getElementById("filters");
+    const grid = document.getElementById("grid");
+    const syncNote = document.getElementById("sync-note");
+
+    const categoryRules = [
+      {key:"porta-chaves", terms:["#portachaves", "porta chaves", "porta-chaves", "chaveiro"]},
+      {key:"bases", terms:["#base", "#bases", "base decorativa"]},
+      {key:"decoracao", terms:["#decoracao", "decoração", "difusor", "vaso"]},
+      {key:"conjuntos", terms:["#conjunto", "#lembranca", "lembrança", "kit"]},
+      {key:"especiais", terms:["dia da mae", "dia da mãe", "natal", "valentine", "presente"]},
+      {key:"momentos", terms:["memoria", "memória", "casamento", "batizado", "recordação"]},
+      {key:"capas", terms:["#capa", "capa", "telemóvel", "telemovel"]}
+    ];
+
+    function categorizePost(post){
+      const text = `${post.title || ""} ${post.caption || ""}`.toLowerCase();
+      for (const rule of categoryRules) {
+        if (rule.terms.some(term => text.includes(term.toLowerCase()))) return rule.key;
+      }
+      return "outros";
+    }
+
+    function uniqueByIdentity(posts){
+      const seen = new Set();
+      return posts.filter((post) => {
+        const key = post.id || post.permalink;
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    function normalizePost(post){
+      const category = post.category || categorizePost(post);
+      const descriptionParts = [];
+      if (post.caption) descriptionParts.push(post.caption);
+      if (post.comments && post.comments[0]) descriptionParts.push(`Comentário: ${post.comments[0]}`);
+      const desc = descriptionParts.join(" · ").slice(0, 220);
+      return {
+        id: post.id,
+        permalink: post.permalink,
+        instagram: true,
+        name: post.title || "Produto Instagram",
+        category,
+        desc: desc || "Produto importado automaticamente do Instagram."
+      };
+    }
+
+    function renderFilters(){
+      filters.innerHTML = "";
+      Object.keys(labels).forEach((key)=>{
+        const b = document.createElement("button");
+        b.textContent = labels[key];
+        b.className = key === active ? "active" : "";
+        b.onclick = () => { active = key; renderFilters(); renderGrid(); };
+        filters.appendChild(b);
+      });
+    }
+
+    function renderGrid(){
+      grid.innerHTML = "";
+      const items = active === "all" ? catalog : catalog.filter(i => i.category === active);
+      items.forEach((item)=>{
+        const card = document.createElement("article");
+        card.className = "item";
+        card.innerHTML = `
+          <span class="tag">${labels[item.category] || "Outros"}</span>
+          <blockquote class="instagram-media" data-instgrm-permalink="${item.permalink}" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+          <span class="source">${item.instagram ? "Fonte: Instagram (legenda + comentário)" : "Fonte: Manual"}</span>
+          <div class="actions">
+            <a class="btn wa" target="_blank" href="https://wa.me/351913685068?text=Olá!%20Tenho%20interesse%20em:%20${encodeURIComponent(item.name)}">WhatsApp</a>
+            <a class="btn ig" target="_blank" href="${item.permalink || "https://www.instagram.com/brilho__artesanal/"}">Post Instagram</a>
+          </div>`;
+        grid.appendChild(card);
+      });
+      if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === "function") {
+        window.instgrm.Embeds.process();
+      }
+    }
+
+    async function loadInstagramCatalog(){
+      try {
+        let posts = [];
+        if (window.location.protocol === "file:" && Array.isArray(window.__IG_FEED__)) {
+          posts = window.__IG_FEED__;
+        } else {
+          const response = await fetch("instagram-feed.json", {cache:"no-store"});
+          posts = await response.json();
+        }
+        const deduped = uniqueByIdentity(posts);
+        const normalized = deduped.map(normalizePost);
+        catalog.splice(0, catalog.length, ...normalized);
+        syncNote.textContent = `Sincronização ativa: ${catalog.length} produtos únicos importados do Instagram.`;
+        if (active !== "all" && !catalog.some((item) => item.category === active)) {
+          active = "all";
+        }
+      } catch (error) {
+        if (Array.isArray(window.__IG_FEED__)) {
+          const deduped = uniqueByIdentity(window.__IG_FEED__);
+          const normalized = deduped.map(normalizePost);
+          catalog.splice(0, catalog.length, ...normalized);
+          syncNote.textContent = `Sincronização ativa (fallback local): ${catalog.length} produtos.`;
+        } else {
+          syncNote.textContent = "Não foi possível carregar o feed automático. Verifica instagram-feed.json / instagram-feed.js.";
+        }
+      }
+      renderFilters();
+      renderGrid();
+    }
+
+    loadInstagramCatalog();
+  </script>
+</body>
+</html>

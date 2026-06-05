@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Brilho Artesanal ✨ | Arte em Resina Epóxi · Peças Únicas Personalizadas · Felgueiras</title>
+<meta name="description" content="Arte em Resina Epóxi feita à mão em Felgueiras. Porta-chaves, bases, capas, decoração e muito mais — únicos e personalizados com amor."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --rose:#8B1A4A; --rose-mid:#C4607A; --rose-light:#F2A8BC;
+  --gold:#C9A84C; --gold-light:#F0D080;
+  --cream:#FDF8F2; --cream-dark:#F5EDE0; --dark:#1A0810; --dark-mid:#2D1020;
+  --font-d:'Playfair Display',Georgia,serif; --font-b:'DM Sans',system-ui,sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-b);background:var(--cream);color:var(--dark);overflow-x:hidden;}
+
+/* Canvas */
+#cvs{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;transition:all .4s;}
+nav.s{background:rgba(26,8,16,.93);backdrop-filter:blur(16px);padding:10px 48px;border-bottom:1px solid rgba(201,168,76,.2);}
+.nl{font-family:var(--font-d);font-size:1.2rem;color:var(--gold-light);text-decoration:none;display:flex;align-items:center;gap:9px;}
+.nm{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:.85rem;}
+.nlinks{list-style:none;display:flex;gap:28px;}
+.nlinks a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.78rem;letter-spacing:1.8px;text-transform:uppercase;transition:color .3s;}
+.nlinks a:hover{color:var(--gold-light);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;
+  background:linear-gradient(160deg,#1a0810 0%,#2d1020 45%,#3a0a25 70%,#1a0810 100%);}
+.orbs{position:absolute;inset:0;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);animation:drift 9s ease-in-out infinite alternate;}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(139,26,74,.5),transparent);top:-150px;left:-150px;}
+.o2{width:450px;height:450px;background:radial-gradient(circle,rgba(201,168,76,.3),transparent);bottom:-100px;right:-100px;animation-delay:-4s;}
+.o3{width:350px;height:350px;background:radial-gradient(circle,rgba(196,96,122,.25),transparent);top:40%;left:40%;animation-delay:-7s;}
+@keyframes drift{to{transform:translate(50px,40px) scale(1.1);}}
+.hi{position:relative;z-index:2;padding:0 24px;max-width:900px;}
+.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);color:var(--gold-light);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;padding:8px 22px;border-radius:100px;margin-bottom:32px;animation:fu .9s var(--ease) .1s both;}
+h1.ht{font-family:var(--font-d);font-size:clamp(3rem,7.5vw,6.5rem);color:#fff;line-height:1.05;margin-bottom:18px;animation:fu .9s var(--ease) .3s both;}
+h1.ht em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--rose-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hsub{font-size:clamp(1rem,2vw,1.15rem);color:rgba(255,255,255,.6);font-weight:300;line-height:1.7;margin-bottom:44px;animation:fu .9s var(--ease) .5s both;}
+.hctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .9s var(--ease) .7s both;}
+.btn-wa{display:inline-flex;align-items:center;gap:9px;background:#25d366;color:#fff;padding:15px 34px;border-radius:100px;text-decoration:none;font-weight:600;font-size:.9rem;box-shadow:0 8px 28px rgba(37,211,102,.35);transition:transform .3s,box-shadow .3s;}
+.btn-wa:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(37,211,102,.5);}
+.btn-g{display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(255,255,255,.35);color:#fff;padding:15px 34px;border-radius:100px;text-decoration:none;font-size:.9rem;transition:all .3s;}
+.btn-g:hover{border-color:var(--gold-light);color:var(--gold-light);transform:translateY(-3px);}
+.scroll-ind{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);z-index:2;animation:pd 2s ease-in-out infinite;}
+.scroll-ind span{display:block;width:1px;height:52px;background:linear-gradient(to bottom,rgba(201,168,76,.7),transparent);margin:0 auto;}
+@keyframes fu{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pd{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+
+/* TRUST */
+.trust{position:relative;z-index:1;background:var(--dark);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
+.ti{padding:36px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.06);opacity:0;transform:translateY(20px);transition:all .6s var(--ease);}
+.ti:last-child{border-right:none;}
+.ti.v{opacity:1;transform:translateY(0);}
+.tn{font-family:var(--font-d);font-size:2.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:5px;}
+.tl{color:rgba(255,255,255,.45);font-size:.75rem;letter-spacing:2px;text-transform:uppercase;}
+
+/* SECTION */
+section{position:relative;z-index:1;}
+.sl{display:block;text-align:center;font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.st{text-align:center;font-family:var(--font-d);font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--dark);margin-bottom:12px;line-height:1.2;}
+.ss{text-align:center;color:#999;font-weight:300;max-width:500px;margin:0 auto 48px;line-height:1.8;font-size:.97rem;}
+.st-w{color:#fff;} .ss-w{color:rgba(255,255,255,.5);}
+
+/* CATEGORY NAV */
+.cat-nav{position:sticky;top:56px;z-index:90;background:rgba(253,248,242,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.06);padding:0;overflow-x:auto;white-space:nowrap;}
+.cat-nav-inner{display:flex;gap:0;max-width:1200px;margin:0 auto;padding:0 24px;}
+.cn-btn{flex-shrink:0;background:none;border:none;cursor:pointer;padding:14px 20px;font-family:var(--font-b);font-size:.82rem;font-weight:500;letter-spacing:.5px;color:#999;border-bottom:2px solid transparent;transition:all .3s;}
+.cn-btn:hover,.cn-btn.active{color:var(--rose);border-bottom-color:var(--rose);}
+
+/* CATEGORIES */
+.cat-section{padding:80px 48px;scroll-margin-top:110px;}
+.cat-section:nth-child(even){background:var(--cream-dark);}
+.cat-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:40px;max-width:1200px;margin-left:auto;margin-right:auto;}
+.cat-title-wrap{}
+.cat-emoji{font-size:2rem;display:block;margin-bottom:6px;}
+.cat-name{font-family:var(--font-d);font-size:2rem;color:var(--dark);}
+.cat-desc{color:#aaa;font-size:.9rem;margin-top:6px;max-width:460px;line-height:1.6;}
+.cat-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:12px 24px;border-radius:100px;text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.5px;transition:all .3s;flex-shrink:0;}
+.cat-cta-btn:hover{background:var(--rose);transform:translateY(-2px);}
+.cat-more-btn{display:inline-flex;align-items:center;justify-content:center;margin:22px auto 0;padding:11px 18px;border-radius:100px;border:1px solid rgba(26,8,16,.18);color:var(--dark);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:.4px;transition:all .3s;}
+.cat-more-btn:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
+
+/* EMBEDS GRID */
+.embeds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;max-width:1200px;margin:0 auto;}
+.embed-wrap{
+  background:#fff;border-radius:16px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.07);
+  transition:transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s;
+  opacity:0;transform:translateY(30px);
+}
+.embed-wrap.v{opacity:1;transform:translateY(0);}
+.embed-wrap:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(139,26,74,.12);}
+.embed-wrap iframe{display:block;width:100%;min-height:440px;border:none;}
+.embed-caption{padding:14px 18px 18px;border-top:1px solid rgba(0,0,0,.05);}
+.embed-caption-text{font-size:.85rem;color:#666;line-height:1.6;}
+.embed-caption-text .em-name{font-weight:600;color:var(--rose);margin-right:4px;}
+.embed-actions{display:flex;gap:8px;margin-top:12px;}
+.e-wa,.e-ig{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;border-radius:10px;text-decoration:none;font-size:.77rem;font-weight:600;transition:all .3s;}
+.e-wa{background:#25d366;color:#fff;}
+.e-wa:hover{background:#1da851;transform:scale(1.02);}
+.e-ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;}
+.e-ig:hover{opacity:.85;transform:scale(1.02);}
+
+/* BENEFITS */
+.benefits{background:linear-gradient(160deg,var(--dark) 0%,var(--dark-mid) 100%);padding:90px 48px;}
+.bg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;max-width:1100px;margin:0 auto;}
+.benefit{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.15);border-radius:18px;padding:32px 28px;opacity:0;transform:translateY(20px);transition:all .6s var(--ease);}
+.benefit.v{opacity:1;transform:translateY(0);}
+.benefit:hover{border-color:rgba(201,168,76,.4);background:rgba(255,255,255,.07);}
+.bi{font-size:2rem;display:block;margin-bottom:14px;}
+.bt{font-family:var(--font-d);font-size:1.1rem;color:var(--gold-light);margin-bottom:8px;}
+.bd{color:rgba(255,255,255,.5);font-size:.86rem;line-height:1.7;}
+
+/* HOW */
+.how{padding:90px 48px;background:var(--cream-dark);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0;max-width:940px;margin:0 auto;position:relative;}
+.steps::before{content:'';position:absolute;top:35px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--rose-light),var(--gold),transparent);}
+.step{text-align:center;padding:0 18px;opacity:0;transform:translateY(20px);transition:all .6s var(--ease);}
+.step.v{opacity:1;transform:translateY(0);}
+.sn{width:70px;height:70px;border-radius:50%;margin:0 auto 18px;background:var(--cream);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:1.5rem;color:var(--gold);position:relative;z-index:1;box-shadow:0 0 0 6px var(--cream-dark);}
+.stitle{font-family:var(--font-d);font-size:1rem;color:var(--dark);margin-bottom:7px;}
+.stext{font-size:.83rem;color:#aaa;line-height:1.6;}
+
+/* REVIEWS */
+.reviews{padding:90px 48px;background:var(--dark);}
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;max-width:1100px;margin:0 auto;}
+.review{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:28px;opacity:0;transform:translateY(20px);transition:all .6s var(--ease);}
+.review.v{opacity:1;transform:translateY(0);}
+.review:hover{border-color:rgba(201,168,76,.3);transform:translateY(-5px);}
+.rstars{color:var(--gold);font-size:.95rem;margin-bottom:12px;letter-spacing:2px;}
+.rtext{color:rgba(255,255,255,.7);font-size:.88rem;line-height:1.75;margin-bottom:18px;font-style:italic;}
+.rtext::before{content:'"';font-family:var(--font-d);font-size:1.9rem;color:var(--rose-light);line-height:0;vertical-align:-.45rem;margin-right:3px;}
+.rauthor{display:flex;align-items:center;gap:11px;}
+.rava{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--rose-mid));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-d);font-size:1rem;font-weight:600;}
+.rname{color:#fff;font-weight:500;font-size:.88rem;}
+.rloc{color:rgba(255,255,255,.3);font-size:.75rem;}
+
+/* FAQ */
+.faq{padding:90px 48px;background:var(--cream);}
+.flist{max-width:740px;margin:0 auto;}
+.fitem{border-bottom:1px solid rgba(0,0,0,.08);opacity:0;transform:translateY(14px);transition:all .5s var(--ease);}
+.fitem.v{opacity:1;transform:translateY(0);}
+.fq{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:20px 0;text-align:left;font-family:var(--font-d);font-size:1rem;color:var(--dark);transition:color .3s;}
+.fq:hover{color:var(--rose);}
+.fi{font-size:1.1rem;color:var(--gold);transition:transform .35s var(--ease);flex-shrink:0;margin-left:14px;}
+.fitem.open .fi{transform:rotate(45deg);}
+.fa{max-height:0;overflow:hidden;transition:max-height .45s var(--ease),padding .3s;font-size:.9rem;color:#888;line-height:1.75;}
+.fitem.open .fa{max-height:200px;padding-bottom:18px;}
+
+/* FINAL CTA */
+.fcta{position:relative;overflow:hidden;background:linear-gradient(135deg,#1a0810 0%,#3a0a25 50%,#1a0810 100%);padding:110px 48px;text-align:center;}
+.fcta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,168,76,.12),transparent);}
+.fcta-in{position:relative;z-index:1;}
+.fcta h2{font-family:var(--font-d);font-size:clamp(2rem,4.5vw,3.8rem);color:#fff;margin-bottom:14px;line-height:1.15;}
+.fcta h2 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.fcta p{color:rgba(255,255,255,.55);font-size:1.05rem;margin-bottom:44px;}
+.fbtns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+.btn-gold{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--dark);padding:17px 42px;border-radius:100px;text-decoration:none;font-weight:700;font-size:.95rem;box-shadow:0 8px 36px rgba(201,168,76,.4);transition:transform .3s,box-shadow .3s;}
+.btn-gold:hover{transform:translateY(-4px);box-shadow:0 20px 56px rgba(201,168,76,.55);}
+
+/* CONTACT */
+.contact{padding:90px 48px;background:var(--cream-dark);text-align:center;}
+.ccards{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
+.cc{background:#fff;border-radius:22px;padding:42px 38px;box-shadow:0 4px 28px rgba(0,0,0,.06);text-decoration:none;color:var(--dark);transition:transform .4s,box-shadow .4s;min-width:230px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.cc:hover{transform:translateY(-10px);box-shadow:0 28px 60px rgba(0,0,0,.1);}
+.ci{width:68px;height:68px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
+.ci.wa{background:#e9fdf1;} .ci.ig{background:#fdeef8;}
+.cn{font-family:var(--font-d);font-size:1.2rem;}
+.cd{color:#bbb;font-size:.85rem;}
+.ca{margin-top:6px;font-size:.76rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:9px 22px;border-radius:100px;color:#fff;}
+.ca.wa{background:#25d366;} .ca.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);}
+
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.15);padding:44px 48px 28px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;}
+.fb{font-family:var(--font-d);color:var(--gold-light);font-size:1.05rem;}
+.fb small{display:block;color:rgba(255,255,255,.28);font-family:var(--font-b);font-size:.72rem;margin-top:4px;}
+.flinks{display:flex;gap:18px;}
+.flinks a{color:rgba(255,255,255,.3);font-size:.76rem;text-decoration:none;transition:color .3s;}
+.flinks a:hover{color:var(--gold-light);}
+.fc{text-align:right;color:rgba(255,255,255,.22);font-size:.72rem;}
+
+/* FLOAT */
+.float{position:fixed;bottom:26px;right:26px;z-index:200;width:58px;height:58px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(37,211,102,.45);text-decoration:none;transition:transform .3s,box-shadow .3s;animation:fpulse 2.5s ease-in-out infinite;}
+.float:hover{transform:scale(1.12);box-shadow:0 16px 44px rgba(37,211,102,.6);animation:none;}
+@keyframes fpulse{0%,100%{box-shadow:0 8px 28px rgba(37,211,102,.45);}50%{box-shadow:0 8px 44px rgba(37,211,102,.7),0 0 0 12px rgba(37,211,102,.1);}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:12px 18px;}
+  .nlinks{display:none;}
+  .cat-section,.benefits,.how,.reviews,.faq,.contact,.fcta{padding:64px 18px;}
+  .embeds-grid{grid-template-columns:1fr;}
+  footer{grid-template-columns:1fr;text-align:center;}
+  .fc{text-align:center;}
+  .flinks{justify-content:center;}
+  .steps::before{display:none;}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+/* Instagram embed override */
+.instagram-media{border-radius:12px!important;margin:0!important;}
+</style>
+</head>
+<body>
+
+<canvas id="cvs"></canvas>
+
+<!-- Float WA -->
+<a href="https://wa.me/351913685068" target="_blank" rel="noopener" class="float" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+</a>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nl" href="#"><div class="nm">✨</div>Brilho Artesanal</a>
+  <ul class="nlinks">
+    <li><a href="#porta-chaves">Porta-chaves</a></li>
+    <li><a href="#bases">Bases</a></li>
+    <li><a href="#decoracao">Decoração</a></li>
+    <li><a href="#especiais">Especiais</a></li>
+    <li><a href="#momentos">Momentos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+  <div class="hi">
+    <div class="pill">✦ Arte em Resina Epóxi · Felgueiras, Portugal ✦</div>
+    <h1 class="ht">Peças únicas<br/>que <em>brilham</em><br/>como tu</h1>
+    <p class="hsub">Criadas à mão com amor · 100% personalizadas · Cada peça conta a tua história</p>
+    <div class="hctas">
+      <a href="https://wa.me/351913685068?text=Olá!%20Vim%20do%20site%20e%20quero%20fazer%20uma%20encomenda%20✨" target="_blank" class="btn-wa">
+        <svg width="19" height="19" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+        Encomendar agora
+      </a>
+      <a href="#porta-chaves" class="btn-g">Ver catálogo ↓</a>
+    </div>
+  </div>
+  <div class="scroll-ind"><span></span></div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="ti"><span class="tn">113+</span><span class="tl">Peças criadas</span></div>
+  <div class="ti"><span class="tn">100%</span><span class="tl">Personalizadas</span></div>
+  <div class="ti"><span class="tn">⭐ 5.0</span><span class="tl">Avaliação</span></div>
+  <div class="ti"><span class="tn">💕</span><span class="tl">Feitas com amor</span></div>
+</div>
+
+<!-- CATEGORY NAV -->
+<nav class="cat-nav">
+  <div class="cat-nav-inner">
+    <button class="cn-btn active" onclick="scrollTo('porta-chaves',this)">🗝️ Porta-chaves</button>
+    <button class="cn-btn" onclick="scrollTo('bases',this)">🌸 Bases</button>
+    <button class="cn-btn" onclick="scrollTo('decoracao',this)">🕯️ Decoração</button>
+    <button class="cn-btn" onclick="scrollTo('especiais',this)">💗 Especiais</button>
+    <button class="cn-btn" onclick="scrollTo('momentos',this)">💕 Momentos</button>
+    <button class="cn-btn" onclick="scrollTo('capas',this)">📱 Capas</button>
+    <button class="cn-btn" onclick="scrollTo('conjuntos',this)">🎁 Conjuntos</button>
+  </div>
+</nav>
+
+<!-- ═══ PORTA-CHAVES ═══ -->
+<section class="cat-section" id="porta-chaves">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">🗝️</span>
+      <h2 class="cat-name">Porta-chaves</h2>
+      <p class="cat-desc">Porta-chaves únicos em resina epóxi — com iniciais, nomes, flores naturais e purpurinas. A peça perfeita para levar sempre contigo ou oferecer.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20um%20porta-chaves%20personalizado%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DY4zwhYCO10/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYzNfXDiFyV/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYxWt6qiPSa/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DX9n9LbiGM4/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXzSZYHiGSQ/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXCC6YuiDtq/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DX4AxQYiHTd/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BASES ═══ -->
+<section class="cat-section" id="bases">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">🌸</span>
+      <h2 class="cat-name">Bases ✨</h2>
+      <p class="cat-desc">Bases decorativas em resina com flores preservadas, efeitos de oceano ou purpurinas. Perfeitas para dar um toque especial ao teu espaço. 100% personalizáveis.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20encomendar%20uma%20base%20personalizada%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYnDYcgCN5F/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYCe03xiJgh/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DX7Rs2bCAMp/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXU2XCEiNHV/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXNEk8uCFuB/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXcaVJViPdW/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXPlXxGCEvn/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DECORAÇÃO ═══ -->
+<section class="cat-section" id="decoracao">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">🕯️</span>
+      <h2 class="cat-name">Decoração</h2>
+      <p class="cat-desc">Difusores, castiçais, vasos e peças decorativas únicas em resina. Para criar um ambiente acolhedor e cheio de personalidade no teu lar.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20saber%20mais%20sobre%20as%20peças%20de%20decoração%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYC9aw9CKmQ/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXNEk8uCFuB/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXKZCQKiC_1/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXcaVJViPdW/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXPlXxGCEvn/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYCe03xiJgh/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXzSZYHiGSQ/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRESENTES ESPECIAIS ═══ -->
+<section class="cat-section" id="especiais">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">💗</span>
+      <h2 class="cat-name">Presentes Especiais</h2>
+      <p class="cat-desc">Dia da Mãe, Dia do Pai, Natal, Valentine's e muito mais. Presentes únicos que simbolizam amor e que ficam para sempre. Personalizados ao teu gosto.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20um%20presente%20especial%20personalizado%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXKZCQKiC_1/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXPlXxGCEvn/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXcaVJViPdW/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXU2XCEiNHV/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYC9aw9CKmQ/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXzSZYHiGSQ/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXNEk8uCFuB/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MOMENTOS ═══ -->
+<section class="cat-section" id="momentos">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">💕</span>
+      <h2 class="cat-name">Momentos ✨</h2>
+      <p class="cat-desc">Eterniza os teus momentos mais preciosos em resina. Fotos, flores do casamento, primeiras memórias — preservadas para sempre numa peça única.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20eternizar%20um%20momento%20especial%20em%20resina%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DX7Rs2bCAMp/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXCC6YuiDtq/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXU2XCEiNHV/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYCe03xiJgh/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXNEk8uCFuB/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYnDYcgCN5F/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CAPAS ═══ -->
+<section class="cat-section" id="capas">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">📱</span>
+      <h2 class="cat-name">Capas ✨</h2>
+      <p class="cat-desc">Capas de telemóvel e porta-cartões artesanais com designs botânicos únicos em resina — flores douradas, azuis, e elementos naturais. Exclusivas e feitas para ti.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20uma%20capa%20personalizada%20em%20resina%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DWzO4eJCFQV/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYxWt6qiPSa/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DX9n9LbiGM4/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXKZCQKiC_1/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONJUNTOS ═══ -->
+<section class="cat-section" id="conjuntos">
+  <div class="cat-header">
+    <div class="cat-title-wrap">
+      <span class="cat-emoji">🎁</span>
+      <h2 class="cat-name">Conjuntos & Lembranças</h2>
+      <p class="cat-desc">Conjuntos completos para oferecer em ocasiões especiais — madrinhas, padrinhos, nascimentos e muito mais. Embalados com carinho e prontos para presentear.</p>
+    </div>
+    <a href="https://wa.me/351913685068?text=Olá!%20Quero%20saber%20mais%20sobre%20conjuntos%20personalizados%20✨" target="_blank" class="cat-cta-btn">
+      <svg width="15" height="15" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+      Encomendar
+    </a>
+  </div>
+  <div class="embeds-grid">
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXU2XCEiNHV/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DX7Rs2bCAMp/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYC9aw9CKmQ/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXcaVJViPdW/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DYnDYcgCN5F/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXCC6YuiDtq/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+    <div class="embed-wrap">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXNEk8uCFuB/" data-instgrm-version="14" style="background:#fff;border:0;border-radius:12px;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <span class="sl" style="color:var(--gold-light)">✦ Porquê nós ✦</span>
+  <h2 class="st st-w" style="margin-bottom:12px;">Feito diferente,<br/><em style="font-style:italic;background:linear-gradient(135deg,var(--gold),var(--rose-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">feito para ti</em></h2>
+  <p class="ss ss-w" style="margin-bottom:52px;">Cada detalhe pensado com cuidado para que a tua peça seja verdadeiramente única</p>
+  <div class="bg">
+    <div class="benefit"><span class="bi">🎨</span><h3 class="bt">100% Personalizável</h3><p class="bd">Escolhes as cores, formas, letras e flores. Cada peça é feita à tua medida.</p></div>
+    <div class="benefit"><span class="bi">💎</span><h3 class="bt">Qualidade Premium</h3><p class="bd">Resina epóxi de alta qualidade, durável e resistente. Brilho para sempre.</p></div>
+    <div class="benefit"><span class="bi">📦</span><h3 class="bt">Entrega Rápida</h3><p class="bd">Entrega em mão em Felgueiras e Lixa. Envio para todo Portugal.</p></div>
+    <div class="benefit"><span class="bi">💕</span><h3 class="bt">Feito com Amor</h3><p class="bd">Não é produção em massa — é arte feita à mão com carinho e atenção.</p></div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how">
+  <span class="sl">✦ Processo ✦</span>
+  <h2 class="st">Do sonho à peça</h2>
+  <p class="ss">Simples, rápido e completamente personalizado para ti</p>
+  <div class="steps">
+    <div class="step"><div class="sn">1</div><h3 class="stitle">Fala connosco</h3><p class="stext">Contacta pelo WhatsApp ou Instagram e diz o que imaginas.</p></div>
+    <div class="step"><div class="sn">2</div><h3 class="stitle">Personalizamos</h3><p class="stext">Juntos escolhemos cores, forma, elementos e acabamentos.</p></div>
+    <div class="step"><div class="sn">3</div><h3 class="stitle">Criamos ✨</h3><p class="stext">A tua peça é moldada em resina epóxi com todo o cuidado.</p></div>
+    <div class="step"><div class="sn">4</div><h3 class="stitle">Entregamos</h3><p class="stext">Recebes embalado com amor, pronto para brilhar.</p></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="feedback">
+  <span class="sl" style="color:var(--gold-light)">✦ Feedback 💕 ✦</span>
+  <h2 class="st st-w" style="margin-bottom:12px;">O que dizem de nós</h2>
+  <p class="ss ss-w" style="margin-bottom:48px;">A opinião de quem já recebeu as suas peças</p>
+  <div class="rg">
+    <div class="review"><div class="rstars">★★★★★</div><p class="rtext">Encomendei um porta-chaves com a inicial da minha filha e ficou absolutamente lindo! A qualidade é impressionante e a entrega foi super rápida. Já fiz a segunda encomenda!</p><div class="rauthor"><div class="rava">S</div><div><div class="rname">Sara M.</div><div class="rloc">Felgueiras</div></div></div></div>
+    <div class="review"><div class="rstars">★★★★★</div><p class="rtext">Carina quero um desses. Em castanho e dourado. Pode ser? — comentário real no Instagram</p><div class="rauthor"><div class="rava">E</div><div><div class="rname">esbtteixeira75</div><div class="rloc">Instagram</div></div></div></div>
+    <div class="review"><div class="rstars">★★★★★</div><p class="rtext">Tão lindoooo 😍 — comentário real no Instagram</p><div class="rauthor"><div class="rava">D</div><div><div class="rname">desimarbarbosa</div><div class="rloc">Instagram</div></div></div></div>
+    <div class="review"><div class="rstars">★★★★★</div><p class="rtext">Comprei uma base em resina rosa para oferecer à minha mãe. Ela ficou encantada! A personalização ficou perfeita. Super recomendo a toda a gente!</p><div class="rauthor"><div class="rava">M</div><div><div class="rname">Mariana F.</div><div class="rloc">Lixa</div></div></div></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <span class="sl">✦ Dúvidas ✦</span>
+  <h2 class="st">Perguntas frequentes</h2>
+  <p class="ss">Tens alguma dúvida? Estamos aqui para ajudar!</p>
+  <div class="flist">
+    <div class="fitem"><button class="fq">Como faço uma encomenda?<span class="fi">+</span></button><div class="fa">Contacta-nos pelo WhatsApp (+351 913 685 068) ou Instagram (@brilho__artesanal) e diz-nos o que queres. Vamos guiar-te em tudo!</div></div>
+    <div class="fitem"><button class="fq">Posso personalizar completamente a minha peça?<span class="fi">+</span></button><div class="fa">Sim! Todas as peças são feitas à tua medida. Podes escolher cores, formas, iniciais, flores — tudo o que imaginares, criamos juntos.</div></div>
+    <div class="fitem"><button class="fq">Quanto tempo demora a fazer a encomenda?<span class="fi">+</span></button><div class="fa">Geralmente entre 5 a 10 dias úteis. Para encomendas urgentes, fala connosco e tentamos sempre ajudar!</div></div>
+    <div class="fitem"><button class="fq">Fazem entregas fora de Felgueiras?<span class="fi">+</span></button><div class="fa">Sim! Entrega em mão em Felgueiras, Lixa e arredores. Para o resto do país enviamos por correio com embalagem cuidadosa.</div></div>
+    <div class="fitem"><button class="fq">As peças são resistentes?<span class="fi">+</span></button><div class="fa">Absolutamente! Usamos resina epóxi de alta qualidade, durável e resistente, que mantém o brilho ao longo do tempo.</div></div>
+    <div class="fitem"><button class="fq">Posso oferecer como prenda com embalagem especial?<span class="fi">+</span></button><div class="fa">Claro! Embalamos com carinho. Temos também conjuntos completos para madrinhas, padrinhos, Dia da Mãe, Natal e mais. Fala connosco!</div></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="fcta">
+  <div class="fcta-in">
+    <h2>Pronta para a tua<br/><em>peça única?</em></h2>
+    <p>Fala connosco hoje e começa a criar algo especial ✨</p>
+    <div class="fbtns">
+      <a href="https://wa.me/351913685068?text=Olá!%20Quero%20fazer%20uma%20encomenda%20especial%20✨" target="_blank" class="btn-gold">
+        <svg width="20" height="20" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#1a0810"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="#25d366"/></svg>
+        Encomendar pelo WhatsApp
+      </a>
+      <a href="https://www.instagram.com/brilho__artesanal/" target="_blank" class="btn-g">Ver Instagram →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contacto">
+  <span class="sl">✦ Contacto ✦</span>
+  <h2 class="st">Fala connosco</h2>
+  <p class="ss">Estamos sempre disponíveis para criar algo especial para ti 💕</p>
+  <div class="ccards">
+    <a href="https://wa.me/351913685068" target="_blank" class="cc">
+      <div class="ci wa"><svg width="34" height="34" viewBox="0 0 32 32" fill="none"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.63 4.65 1.73 6.6L2 30l7.6-1.7A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#25d366"/><path d="M23.3 20.1c-.32-.16-1.9-.94-2.2-1.04-.3-.1-.52-.16-.74.16-.22.32-.86 1.04-1.04 1.26-.18.22-.38.24-.7.08-.32-.16-1.34-.5-2.54-1.58-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.5.14-.66.14-.14.32-.38.48-.56.16-.18.22-.32.32-.54.1-.22.06-.4-.02-.56-.08-.16-.74-1.78-1.02-2.44-.26-.64-.54-.56-.74-.56h-.62c-.22 0-.56.08-.86.4-.3.32-1.12 1.1-1.12 2.68 0 1.58 1.14 3.1 1.3 3.32.16.22 2.24 3.42 5.44 4.8.76.32 1.36.52 1.82.66.76.24 1.46.2 2 .12.62-.1 1.9-.78 2.16-1.52.26-.74.26-1.38.18-1.52-.08-.12-.28-.2-.6-.36z" fill="white"/></svg></div>
+      <div class="cn">WhatsApp</div>
+      <div class="cd">+351 913 685 068</div>
+      <div class="ca wa">Enviar mensagem</div>
+    </a>
+    <a href="https://www.instagram.com/brilho__artesanal/" target="_blank" class="cc">
+      <div class="ci ig"><svg width="34" height="34" fill="url(#ig3)" viewBox="0 0 24 24"><defs><linearGradient id="ig3" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#fcb045"/><stop offset="50%" style="stop-color:#fd1d1d"/><stop offset="100%" style="stop-color:#833ab4"/></linearGradient></defs><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+      <div class="cn">Instagram</div>
+      <div class="cd">@brilho__artesanal</div>
+      <div class="ca ig">Ver perfil</div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fb">Brilho Artesanal ✨<small>Arte em Resina Epóxi · Felgueiras, Portugal</small></div>
+  <div class="flinks">
+    <a href="#porta-chaves">Porta-chaves</a>
+    <a href="#bases">Bases</a>
+    <a href="#decoracao">Decoração</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <div class="fc">© 2025 Brilho Artesanal · Feito com 💕</div>
+</footer>
+
+<!-- Instagram Embed Script -->
+<script async src="https://www.instagram.com/embed.js"></script>
+
+<script>
+// ── GLITTER ──
+const cvs=document.getElementById('cvs'),ctx=cvs.getContext('2d');
+let W,H;
+const rs=()=>{W=cvs.width=innerWidth;H=cvs.height=innerHeight;};rs();addEventListener('resize',rs);
+const C=['#c9a84c','#f0d080','#e8a0b4','#fff','#c4607a','#d4a0ff'];
+const pts=Array.from({length:120},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*2+.4,c:C[Math.floor(Math.random()*C.length)],spd:Math.random()*.3+.08,ang:Math.random()*Math.PI*2,drft:(Math.random()-.5)*.011,op:Math.random()*.6+.1,td:1,ts:Math.random()*.016+.004}));
+(function t(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.ang+=p.drft;p.x+=Math.cos(p.ang)*p.spd;p.y-=p.spd*.35;p.op+=p.ts*p.td;if(p.op>.88||p.op<.05)p.td*=-1;if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}if(p.x<-10)p.x=W+10;if(p.x>W+10)p.x=-10;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.globalAlpha=p.op;ctx.fill();if(p.r>1.5){ctx.globalAlpha=p.op*.35;ctx.beginPath();ctx.moveTo(p.x-p.r*2.6,p.y);ctx.lineTo(p.x+p.r*2.6,p.y);ctx.moveTo(p.x,p.y-p.r*2.6);ctx.lineTo(p.x,p.y+p.r*2.6);ctx.strokeStyle=p.c;ctx.lineWidth=.5;ctx.stroke();}});ctx.globalAlpha=1;requestAnimationFrame(t);})();
+
+// ── NAV ──
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>60));
+
+// ── INTERSECTION ──
+const io=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('v'),i*60);}),{threshold:.08});
+document.querySelectorAll('.ti,.benefit,.step,.review,.fitem,.embed-wrap').forEach(el=>io.observe(el));
+
+// ── CAT NAV SCROLL ──
+function scrollTo(id,btn){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.cn-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── CAT NAV ACTIVE on scroll ──
+const cats=['porta-chaves','bases','decoracao','especiais','momentos','capas','conjuntos'];
+const catBtns=document.querySelectorAll('.cn-btn');
+addEventListener('scroll',()=>{
+  let current='';
+  cats.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<200)current=id;});
+  catBtns.forEach((btn,i)=>{btn.classList.toggle('active',cats[i]===current);});
+},{passive:true});
+
+// ── DEDUPE + LANDING LIMIT ──
+const MAX_ITEMS_PER_CATEGORY=3;
+const seenPermalinks=new Set();
+document.querySelectorAll('.cat-section').forEach(section=>{
+  const wraps=[...section.querySelectorAll('.embed-wrap')];
+  let visibleCount=0;
+  wraps.forEach(wrap=>{
+    const block=wrap.querySelector('blockquote.instagram-media');
+    const permalink=(block?.dataset?.instgrmPermalink||'').trim();
+    if(!permalink||seenPermalinks.has(permalink)||visibleCount>=MAX_ITEMS_PER_CATEGORY){
+      wrap.remove();
+      return;
+    }
+    seenPermalinks.add(permalink);
+    visibleCount++;
+  });
+
+  const catId=section.id;
+  if(catId){
+    const moreLink=document.createElement('a');
+    moreLink.className='cat-more-btn';
+    moreLink.href=`catalogo.html?cat=${encodeURIComponent(catId)}`;
+    moreLink.textContent='Ver todos desta categoria';
+    section.appendChild(moreLink);
+  }
+});
+
+// ── FAQ ──
+document.querySelectorAll('.fq').forEach(btn=>btn.addEventListener('click',()=>{const item=btn.parentElement;const open=item.classList.contains('open');document.querySelectorAll('.fitem.open').forEach(i=>i.classList.remove('open'));if(!open)item.classList.add('open');}));
+</script>
+</body>
+</html>
