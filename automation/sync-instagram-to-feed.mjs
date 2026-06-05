@@ -96,6 +96,7 @@ async function fetchLatestComment(mediaId) {
 const DELAY_BETWEEN_PAGES_MS = 500;
 const DELAY_BETWEEN_COMMENTS_MS = 200;
 const MEDIA_FIELDS = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
+const IMAGES_DIR = path.resolve(__dirname, "../public/produtos");
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -152,6 +153,9 @@ async function main() {
 
   const igUserId = process.env.IG_USER_ID;
 
+  // Ensure images directory exists
+  await fs.mkdir(IMAGES_DIR, { recursive: true });
+
   console.log(`Fetching ALL posts for user ${igUserId}...`);
   const rawMedia = await fetchAllMedia(igUserId);
   console.log(`Fetched ${rawMedia.length} total posts from Instagram.`);
@@ -165,7 +169,28 @@ async function main() {
       await sleep(DELAY_BETWEEN_COMMENTS_MS);
     }
     const comments = await fetchLatestComment(media.id);
-    const mediaUrl = media.media_url || media.thumbnail_url || "";
+
+    // For CAROUSEL_ALBUM posts, the top-level media_url is a cropped 640x640
+    // thumbnail. We need to fetch the children to get the first image in full
+    // resolution.
+    let mediaUrl = media.media_url || media.thumbnail_url || "";
+    if (media.media_type === "CAROUSEL_ALBUM") {
+      try {
+        const children = await graphFetch(`/${media.id}/children`, {
+          fields: "id,media_type,media_url"
+        });
+        if (children.data && children.data.length > 0) {
+          // Pick the first IMAGE child (skip videos)
+          const firstImage = children.data.find(c => c.media_type === "IMAGE") || children.data[0];
+          if (firstImage.media_url) {
+            mediaUrl = firstImage.media_url;
+            console.log(`    Carousel ${media.id}: using child image (full res)`);
+          }
+        }
+      } catch (err) {
+        console.warn(`    Could not fetch carousel children for ${media.id}: ${err.message}`);
+      }
+    }
     
     // Download image locally to prevent 403 CDN expirations
     let localImagePath = "";
@@ -176,9 +201,9 @@ async function main() {
           const buffer = await imageRes.arrayBuffer();
           // use post ID as filename to avoid duplicates
           const filename = `${media.id}.jpg`;
-          const filepath = path.join(__dirname, "../public/instagram", filename);
+          const filepath = path.join(IMAGES_DIR, filename);
           await fs.writeFile(filepath, Buffer.from(buffer));
-          localImagePath = `/instagram/${filename}`;
+          localImagePath = `/produtos/${filename}`;
           console.log(`    Saved image ${filename}`);
         }
       } catch (err) {
@@ -193,6 +218,7 @@ async function main() {
       caption: media.caption || "",
       comments,
       media_url: mediaUrl,
+      local_image: localImagePath,
       local_image_url: localImagePath,
       timestamp: media.timestamp || null
     };

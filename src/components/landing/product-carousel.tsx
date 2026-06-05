@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ClientInstagramEmbed } from "@/components/ui/client-instagram-embed";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function ProductCarousel() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -90,17 +90,19 @@ function CarouselContent({ posts, loading }: { posts: any[], loading: boolean })
                     <Link href={`/produto/${post.id}`} className="absolute inset-0 z-20" aria-label={`Ver detalhes de ${post.title}`} />
                     
                     {/* Image Container */}
-                    <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden flex items-center justify-center pointer-events-none group-hover/card:scale-105 transition-transform duration-700">
+                    <div className="relative w-full aspect-square bg-gray-50 overflow-hidden flex items-center justify-center pointer-events-none group-hover/card:scale-105 transition-transform duration-700">
                       {post.local_image_url ? (
                         <img 
                           src={post.local_image_url} 
                           alt={post.title} 
-                          className="w-full h-full object-cover" 
+                          className="w-full h-full object-contain" 
                           loading="lazy" 
                         />
                       ) : (
-                        <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
-                          <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-300">
+                          <svg className="w-8 h-8 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
                         </div>
                       )}
                       

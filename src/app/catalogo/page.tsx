@@ -1,25 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFloat } from "@/components/layout/whatsapp-float";
 import { FadeIn } from "@/components/ui/fade-in";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ClientInstagramEmbed } from "@/components/ui/client-instagram-embed";
 
 const LABELS: Record<string, string> = {
   all: "Todas",
   "porta-chaves": "Porta-chaves",
-  bases: "Bases",
   decoracao: "Decoração",
   especiais: "Especiais"
 };
 
-export default function Catalogo() {
+function CatalogoContent() {
+  const searchParams = useSearchParams();
+  const categoriaQuery = searchParams.get("categoria");
+
   const [posts, setPosts] = useState<any[]>([]);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState(categoriaQuery || "all");
+
+  useEffect(() => {
+    if (categoriaQuery && LABELS[categoriaQuery]) {
+      setFilter(categoriaQuery);
+    }
+  }, [categoriaQuery]);
   const [loading, setLoading] = useState(true);
   const [renderingInsta, setRenderingInsta] = useState(true);
 
@@ -43,7 +51,16 @@ export default function Catalogo() {
     }
   }, [loading]);
 
-  const filteredPosts = posts.filter(post => filter === "all" || post.category === filter);
+  const filteredPosts = posts.filter(post => {
+    if (filter === "all") return true;
+    if (filter === "especiais") {
+      return !["porta-chaves", "bases", "decoracao"].includes(post.category);
+    }
+    if (filter === "decoracao") {
+      return post.category === "decoracao" || post.category === "bases";
+    }
+    return post.category === filter;
+  });
 
   return (
     <>
@@ -106,53 +123,37 @@ export default function Catalogo() {
                 <motion.div
                   key={post.id}
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative flex-grow flex flex-col bg-white/60 backdrop-blur-xl border border-white p-3 md:p-4 rounded-[2rem] shadow-[0_8px_30px_rgba(139,26,74,0.06)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(139,26,74,0.15)] hover:-translate-y-2 hover:bg-white/80 group h-full"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.25 }}
                 >
-                  {/* Decorative Pin/Dot */}
-                  <div className="absolute top-6 left-6 w-2 h-2 rounded-full bg-gradient-to-r from-[var(--color-gold)] to-[var(--color-rose)] z-20 shadow-sm" />
-
-                  <div className="rounded-[1.5rem] overflow-hidden bg-white flex-grow flex flex-col group/card h-full relative">
-                    {/* The clickable overlay for the whole card */}
-                    <Link href={`/produto/${post.id}`} className="absolute inset-0 z-20" aria-label={`Ver detalhes de ${post.title}`} />
-                    
-                    {/* Image Container */}
-                    <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden flex items-center justify-center pointer-events-none group-hover/card:scale-105 transition-transform duration-700">
-                      {post.local_image_url ? (
-                        <img 
-                          src={post.local_image_url} 
-                          alt={post.title} 
-                          className="w-full h-full object-cover" 
-                          loading="lazy" 
-                        />
-                      ) : (
-                        <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
-                          <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
-                        </div>
-                      )}
-                      
-                      {/* Overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/card:opacity-100 z-10" />
+                  <Link
+                    href={`/produto/${post.id}`}
+                    className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  >
+                    {/* Imagem */}
+                    <div className="w-full aspect-square overflow-hidden bg-[#faf8f5] flex items-center justify-center">
+                      <img
+                        src={post.local_image_url || `/api/image?url=${encodeURIComponent(post.media_url || '')}`}
+                        alt={post.title}
+                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
                     </div>
-                    
-                    {/* Content */}
-                    <div className="p-6 flex flex-col flex-grow bg-white relative z-10 pointer-events-none">
-                      <h3 className="font-serif text-xl text-[var(--color-dark)] line-clamp-2 mb-3 leading-tight">
+                    {/* Texto */}
+                    <div className="p-4">
+                      <h3 className="font-serif text-base text-[var(--color-dark)] line-clamp-2 leading-snug mb-2">
                         {post.title}
                       </h3>
-                      <div className="mt-auto flex items-center justify-between text-[var(--color-rose-mid)] font-bold text-sm tracking-wide uppercase pt-4 border-t border-gray-100">
-                        <span className="flex items-center">
-                          Ver Detalhes
-                          <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover/card:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </span>
-                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--color-rose-mid)] uppercase tracking-wide">
+                        Ver detalhes
+                        <svg className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </span>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -197,5 +198,17 @@ export default function Catalogo() {
       <Footer />
       <WhatsAppFloat />
     </>
+  );
+}
+
+export default function Catalogo() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-cream)]">
+        <div className="w-16 h-16 border-4 border-[var(--color-gold)] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <CatalogoContent />
+    </Suspense>
   );
 }

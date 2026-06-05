@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
-import { ClientInstagramEmbed } from "@/components/ui/client-instagram-embed";
 
 export function ProductMarquee() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -56,12 +55,14 @@ export function ProductMarquee() {
                     <img
                       src={post.local_image_url}
                       alt={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
-                      <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-3">
+                      <svg className="w-8 h-8 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                     </div>
                   )}
                   {/* Overlay gradient */}

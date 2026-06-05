@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -16,6 +17,10 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const shouldHaveBg = scrolled || !isHome;
+
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -23,7 +28,7 @@ export function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-400 px-6 md:px-12 py-4 flex items-center justify-between",
-        scrolled
+        shouldHaveBg
           ? "bg-[rgba(26,8,16,0.93)] backdrop-blur-md py-3 border-b border-[rgba(201,168,76,0.2)]"
           : "bg-transparent"
       )}
@@ -37,10 +42,9 @@ export function Navbar() {
       
       <ul className="hidden md:flex gap-7 list-none m-0 p-0">
         {[
-          { label: "Porta-chaves", href: "/#porta-chaves" },
-          { label: "Bases", href: "/#bases" },
-          { label: "Decoração", href: "/#decoracao" },
-          { label: "Especiais", href: "/#especiais" },
+          { label: "Porta-chaves", href: "/catalogo?categoria=porta-chaves" },
+          { label: "Decoração", href: "/catalogo?categoria=decoracao" },
+          { label: "Especiais", href: "/catalogo?categoria=especiais" },
           { label: "Catálogo", href: "/catalogo" },
         ].map((item) => (
           <li key={item.label}>
