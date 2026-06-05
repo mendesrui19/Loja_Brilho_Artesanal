@@ -2,8 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { InstagramEmbed } from 'react-social-media-embed';
+import dynamic from 'next/dynamic';
 
+const InstagramEmbed = dynamic(
+  () => import('react-social-media-embed').then((mod) => mod.InstagramEmbed),
+  { ssr: false }
+);
 export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
