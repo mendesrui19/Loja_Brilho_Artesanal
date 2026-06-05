@@ -4,12 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
 import { motion, useScroll, useTransform } from "framer-motion";
-import dynamic from "next/dynamic";
-
-const InstagramEmbed = dynamic(
-  () => import("react-social-media-embed").then((mod) => mod.InstagramEmbed),
-  { ssr: false }
-);
+import { ClientInstagramEmbed } from "@/components/ui/client-instagram-embed";
 
 export function ProductCarousel() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -98,7 +93,7 @@ function CarouselContent({ posts, loading }: { posts: any[], loading: boolean })
                     <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden flex items-center justify-center pointer-events-none group-hover/card:scale-105 transition-transform duration-700">
                       {/* CSS Clipping Trick to hide Instagram UI and show uncropped image */}
                       <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
-                        <InstagramEmbed url={post.permalink} width="100%" captioned={false} />
+                        <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
                       </div>
                       
                       {/* Overlay gradient */}

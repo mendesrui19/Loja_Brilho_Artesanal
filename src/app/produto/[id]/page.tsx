@@ -2,12 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-
-const InstagramEmbed = dynamic(
-  () => import('react-social-media-embed').then((mod) => mod.InstagramEmbed),
-  { ssr: false }
-);
+import { ClientInstagramEmbed } from '@/components/ui/client-instagram-embed';
 export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
@@ -44,7 +39,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
           {/* Left side: Instagram Embed */}
           <div className="w-full md:w-1/2 bg-gray-50 flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-gray-100">
             <div className="w-full flex justify-center">
-              <InstagramEmbed url={product.permalink} width={328} />
+              <ClientInstagramEmbed url={product.permalink} width={328} />
             </div>
           </div>
 
