@@ -121,10 +121,18 @@ export default function Catalogo() {
                     
                     {/* Image Container */}
                     <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden flex items-center justify-center pointer-events-none group-hover/card:scale-105 transition-transform duration-700">
-                      {/* CSS Clipping Trick to hide Instagram UI and show uncropped image */}
-                      <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
-                        <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
-                      </div>
+                      {post.local_image_url ? (
+                        <img 
+                          src={post.local_image_url} 
+                          alt={post.title} 
+                          className="w-full h-full object-cover" 
+                          loading="lazy" 
+                        />
+                      ) : (
+                        <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
+                          <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
+                        </div>
+                      )}
                       
                       {/* Overlay gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/card:opacity-100 z-10" />

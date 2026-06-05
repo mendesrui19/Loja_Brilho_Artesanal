@@ -166,6 +166,26 @@ async function main() {
     }
     const comments = await fetchLatestComment(media.id);
     const mediaUrl = media.media_url || media.thumbnail_url || "";
+    
+    // Download image locally to prevent 403 CDN expirations
+    let localImagePath = "";
+    if (mediaUrl) {
+      try {
+        const imageRes = await fetch(mediaUrl);
+        if (imageRes.ok) {
+          const buffer = await imageRes.arrayBuffer();
+          // use post ID as filename to avoid duplicates
+          const filename = `${media.id}.jpg`;
+          const filepath = path.join(__dirname, "../public/instagram", filename);
+          await fs.writeFile(filepath, Buffer.from(buffer));
+          localImagePath = `/instagram/${filename}`;
+          console.log(`    Saved image ${filename}`);
+        }
+      } catch (err) {
+        console.warn(`    Failed to download image for ${media.id}: ${err.message}`);
+      }
+    }
+
     const base = {
       id: media.id,
       permalink: media.permalink,
@@ -173,6 +193,7 @@ async function main() {
       caption: media.caption || "",
       comments,
       media_url: mediaUrl,
+      local_image_url: localImagePath,
       timestamp: media.timestamp || null
     };
     normalized.push({

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Script from "next/script";
+import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
+import { ClientInstagramEmbed } from "@/components/ui/client-instagram-embed";
 
 export function ProductMarquee() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -12,27 +13,17 @@ export function ProductMarquee() {
     fetch("/api/feed")
       .then((res) => res.json())
       .then((data) => {
-        // Select 6 unique/diverse posts for the marquee
-        const selected = data.slice(0, 6);
+        // Pick diverse posts across categories
+        const selected = data.slice(0, 8);
         setPosts(selected);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error("Failed to fetch marquee data", err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
-  // Process Instagram embeds once they are loaded
-  useEffect(() => {
-    if (!loading && (window as any).instgrm) {
-      setTimeout(() => {
-        (window as any).instgrm.Embeds.process();
-      }, 500);
-    }
-  }, [loading, posts]);
-
   if (loading || posts.length === 0) return null;
+
+  const doubled = [...posts, ...posts];
 
   return (
     <section className="py-24 bg-white overflow-hidden relative">
@@ -49,40 +40,41 @@ export function ProductMarquee() {
       </FadeIn>
 
       <div className="relative flex w-full max-w-[100vw] overflow-hidden">
-        {/* Left Gradient Mask */}
         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        
-        {/* Right Gradient Mask */}
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-        <div className="flex w-fit animate-marquee hover:[animation-play-state:paused]">
-          {/* Double the posts to create a seamless infinite loop */}
-          {[...posts, ...posts].map((post, i) => (
-            <div
+        <div className="flex w-fit animate-marquee hover:[animation-play-state:paused] py-4">
+          {doubled.map((post, i) => (
+            <Link
               key={`${post.id}-${i}`}
-              className="w-[320px] md:w-[350px] mx-4 shrink-0 transition-transform duration-500 hover:scale-[1.02]"
+              href={`/produto/${post.id}`}
+              className="w-[260px] md:w-[300px] mx-3 shrink-0 group"
             >
-              <blockquote
-                className="instagram-media"
-                data-instgrm-permalink={post.permalink}
-                data-instgrm-version="14"
-                style={{
-                  background: "#FFF",
-                  border: 0,
-                  borderRadius: "16px",
-                  boxShadow: "0 10px 30px -10px rgba(139,26,74,0.15)",
-                  margin: "1px",
-                  maxWidth: "100%",
-                  minWidth: "100%",
-                  padding: 0,
-                  width: "100%"
-                }}
-              />
-            </div>
+              <div className="rounded-2xl overflow-hidden bg-[var(--color-cream-dark)] shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-pink-50">
+                <div className="aspect-square overflow-hidden relative bg-white flex items-center justify-center">
+                  {post.local_image_url ? (
+                    <img
+                      src={post.local_image_url}
+                      alt={post.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="absolute top-[-58px] left-[-2px] right-[-2px] w-[calc(100%+4px)]">
+                      <ClientInstagramEmbed url={post.permalink} width="100%" captioned={false} />
+                    </div>
+                  )}
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10 pointer-events-none" />
+                </div>
+                <div className="px-5 py-4 bg-white relative z-20">
+                  <p className="text-sm font-medium text-[var(--color-dark)] line-clamp-1">{post.title}</p>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
-      <Script src="https://www.instagram.com/embed.js" strategy="lazyOnload" />
     </section>
   );
 }

@@ -40,8 +40,16 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden flex flex-col md:flex-row">
           {/* Left side: Instagram Embed */}
           <div className="w-full md:w-1/2 bg-gray-50 flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-gray-100">
-            <div className="w-full flex justify-center">
-              <ClientInstagramEmbed url={product.permalink} width={328} />
+            <div className="w-full flex justify-center items-center">
+              {product.local_image_url ? (
+                <img 
+                  src={product.local_image_url} 
+                  alt={product.title} 
+                  className="w-full h-auto object-contain max-h-[600px] rounded-lg" 
+                />
+              ) : (
+                <ClientInstagramEmbed url={product.permalink} width={328} />
+              )}
             </div>
           </div>
 
