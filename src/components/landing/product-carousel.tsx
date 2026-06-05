@@ -14,7 +14,9 @@ export function ProductCarousel() {
     fetch("/api/feed")
       .then((res) => res.json())
       .then((data) => {
-        setPosts(data);
+        // Shuffle the array to create variety
+        const shuffled = [...data].sort(() => Math.random() - 0.5);
+        setPosts(shuffled);
         setLoading(false);
       })
       .catch((err) => {
@@ -56,9 +58,13 @@ function CarouselContent({ posts, loading }: { posts: any[], loading: boolean })
           </p>
           <Link 
             href="/catalogo"
-            className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-[var(--color-gold)] text-[var(--color-gold)] text-sm font-bold tracking-wide transition-all hover:bg-[var(--color-gold)] hover:text-white"
+            className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-[var(--color-gold)] via-[#e2c775] to-[var(--color-gold-light)] text-[var(--color-dark)] text-sm font-bold tracking-wider uppercase overflow-hidden shadow-[0_8px_20px_rgba(201,168,76,0.3)] transition-all duration-300 hover:shadow-[0_15px_30px_rgba(201,168,76,0.5)] hover:-translate-y-1"
           >
-            Ver todo o catálogo →
+            <span className="relative z-10 flex items-center gap-2">
+              Ver todo o catálogo
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
           </Link>
         </FadeIn>
       </div>

@@ -29,6 +29,7 @@ function CatalogoContent() {
     }
   }, [categoriaQuery]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [renderingInsta, setRenderingInsta] = useState(true);
 
   useEffect(() => {
@@ -67,6 +68,15 @@ function CatalogoContent() {
       <Navbar />
       
       <main className="min-h-screen pt-32 pb-24 px-6 max-w-[1200px] mx-auto">
+        <Link 
+          href="/" 
+          className="inline-flex items-center text-gray-500 hover:text-[var(--color-rose-mid)] transition-colors mb-8"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Voltar para a página inicial
+        </Link>
         <FadeIn>
           <div className="text-center mb-12">
             <h1 className="font-serif text-[clamp(2rem,5vw,3.5rem)] text-[var(--color-dark)] mb-4">
@@ -76,22 +86,62 @@ function CatalogoContent() {
               Navega pelas nossas criações anteriores. Se vires algo que adoras, envia-nos mensagem. Todas as peças podem ser recriadas ou adaptadas ao teu gosto!
             </p>
 
-            {/* Filters */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {Object.entries(LABELS).map(([key, label]) => (
-                <button
-                  key={key}
-                  onClick={() => setFilter(key)}
-                  className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-                    filter === key
-                      ? "bg-[var(--color-brand)] text-white shadow-md scale-105"
-                      : "bg-white border border-[rgba(26,8,16,0.15)] text-[var(--color-dark)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+            <FadeIn delay={0.1}>
+              <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6 border-b border-gray-100 pb-6">
+                <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
+                  {Object.entries(LABELS).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setFilter(key)}
+                      className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                        filter === key
+                          ? "bg-[var(--color-rose-mid)] text-white shadow-md"
+                          : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1 shadow-sm">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    aria-label="Visualização em Grelha"
+                    className={`p-2 rounded-md transition-colors ${
+                      viewMode === "grid" 
+                        ? "bg-gray-100 text-[var(--color-rose-mid)]" 
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    aria-label="Visualização em Lista"
+                    className={`p-2 rounded-md transition-colors ${
+                      viewMode === "list" 
+                        ? "bg-gray-100 text-[var(--color-rose-mid)]" 
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="8" y1="6" x2="21" y2="6"></line>
+                      <line x1="8" y1="12" x2="21" y2="12"></line>
+                      <line x1="8" y1="18" x2="21" y2="18"></line>
+                      <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                      <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                      <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </FadeIn>
 
@@ -116,7 +166,11 @@ function CatalogoContent() {
           <motion.div 
             id="insta-grid"
             layout 
-            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-700 ${(loading || renderingInsta) ? 'opacity-0' : 'opacity-100'}`}
+            className={`transition-opacity duration-700 ${(loading || renderingInsta) ? 'opacity-0' : 'opacity-100'} ${
+              viewMode === "grid"
+                ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"
+                : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto"
+            }`}
           >
             <AnimatePresence mode="popLayout">
               {filteredPosts.map((post) => (
@@ -133,7 +187,7 @@ function CatalogoContent() {
                     className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                   >
                     {/* Imagem */}
-                    <div className="w-full aspect-square overflow-hidden bg-[#faf8f5] flex items-center justify-center">
+                    <div className="w-full aspect-square overflow-hidden bg-white flex items-center justify-center p-2">
                       <img
                         src={post.local_image_url || `/api/image?url=${encodeURIComponent(post.media_url || '')}`}
                         alt={post.title}

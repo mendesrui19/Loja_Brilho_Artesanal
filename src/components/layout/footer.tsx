@@ -10,15 +10,11 @@ export function Footer() {
         </small>
       </div>
 
-      <div className="flex justify-center gap-4">
-        <Link href="/#porta-chaves" className="text-white/30 text-xs hover:text-[var(--color-gold-light)] transition-colors">
-          Porta-chaves
-        </Link>
-        <Link href="/catalogo" className="text-white/30 text-xs hover:text-[var(--color-gold-light)] transition-colors">
-          Catálogo
-        </Link>
-        <Link href="/inspiracao" className="text-white/30 text-xs hover:text-[var(--color-gold-light)] transition-colors">
-          Inspiração
+      <div className="flex justify-center">
+        <Link href="/" aria-label="Voltar à página inicial">
+          <div className="w-20 h-20 rounded-full border border-[rgba(201,168,76,0.3)] overflow-hidden shrink-0 shadow-lg flex items-center justify-center hover:border-[var(--color-gold)] transition-colors duration-300">
+            <img src="/logo.jpg" alt="Brilho Artesanal Logo" className="w-full h-full object-cover scale-[1.35]" />
+          </div>
         </Link>
       </div>
 

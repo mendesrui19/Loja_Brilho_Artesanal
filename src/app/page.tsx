@@ -8,9 +8,17 @@ import { FadeIn } from "@/components/ui/fade-in";
 import { ProductCarousel } from "@/components/landing/product-carousel";
 import { AboutAndProcess } from "@/components/landing/about-and-process";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 1.2;
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -19,6 +27,7 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center text-center overflow-hidden bg-gradient-to-br from-[#1a0810] via-[#2d1020] to-[#1a0810]">
         {/* Video Background */}
         <video 
+          ref={videoRef}
           autoPlay 
           loop 
           muted 
