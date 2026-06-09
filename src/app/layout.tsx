@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Playfair_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="pt" className={`${dmSans.variable} ${playfair.variable} scroll-smooth`}>
       <body className="antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );
